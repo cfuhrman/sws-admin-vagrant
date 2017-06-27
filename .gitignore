@@ -1,0 +1,8 @@
+.DS_Store
+*~
+.vagrant/
+GPATH
+GRTAGS
+GTAGS
+TAGS
+.project
