@@ -23,6 +23,7 @@ STANDARD_RPMS=('curl'				\
 	       'pcre-devel'			\
 	       'pkgconfig'			\
 	       'rsync'				\
+	       'tmux'				\
 	       'unzip'
 	      )
 
