@@ -58,9 +58,9 @@ inform ()
         local msg=$2
 
         if [[ $level -eq $L1 ]]; then
-                local delimiter='=='
+                local delimiter='==='
         else
-                local delimiter='--'
+                local delimiter='---'
         fi
 
 	echo "${delimiter}> ${msg}"
@@ -71,6 +71,8 @@ inform ()
 headerDisplay
 
 source ${SCRIPTS_DIR}/standard.sh
+source ${SCRIPTS_DIR}/postgresql.sh
+source ${SCRIPTS_DIR}/kong.sh
 
-inform ${L1} "Done"
+inform ${L1} "Done with Provisioning.  Now it's time to have fun!"
 

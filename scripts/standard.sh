@@ -15,18 +15,24 @@
 #
 
 # List of Standard RPMs to install
-STANDARD_RPMS=('curl'				\
+STANDARD_RPMS=('aspell'				\
+	       'aspell-en'			\
+ 	       'curl'				\
 	       'emacs-nox'			\
 	       'git'				\
 	       'make'				\
 	       'man-pages'			\
+	       'mg'				\
 	       'pcre-devel'			\
 	       'pkgconfig'			\
 	       'rsync'				\
 	       'tmux'				\
+	       'screen'				\
 	       'unzip'
-	      )
+)
 
+# Install the epel release repository
+sudo yum --assumeyes  install epel-release
 
 inform $L1 "Installing Standard Packages"
 sudo yum --assumeyes install ${STANDARD_RPMS[*]}

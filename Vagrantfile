@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "bento/centos-7.3"
+  config.vm.box = "centos/7"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -52,6 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -83,6 +84,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   apt-get install -y apache2
   # SHELL
 
+  if ENV["KONG_PATH"]
+    source = ENV["KONG_PATH"]
+  elsif File.directory?("./kong")
+    source = "./kong"
+  elsif File.directory?("../kong")
+    source = "../kong"
+  else
+    source = ""
+  end
+
+  if ENV["KONG_PLUGIN_PATH"]
+    plugin_source = ENV["KONG_PLUGIN_PATH"]
+  elsif File.directory?("./kong-plugin")
+    plugin_source = "./kong-plugin"
+  elsif File.directory?("../kong-plugin")
+    plugin_source = "../kong-plugin"
+  else
+    plugin_source = ""
+  end
+
   if ENV['KONG_VB_MEM']
     memory = ENV["KONG_VB_MEM"]
   else
@@ -100,9 +121,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8001, host: 8001
   config.vm.network :forwarded_port, guest: 8443, host: 8443
   config.vm.network :forwarded_port, guest: 8444, host: 8444
-  config.vm.network :private_network, ip: '192.168.44.43'
   # config.vm.network "private_network", type: "dhcp"
+  config.vm.network :private_network, ip: '192.168.44.43'
 
+  #
+  # Host manager for local hosts file
+  #
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.vm.define 'default' do |node|
+    node.vm.hostname = 'admin-dev.corp.shipwire.com'
+    node.hostmanager.aliases = %w(
+      kong.admin-dev.corp.shipwire.com
+      pgdb.admin-dev.corp.shipwire.com
+    )
+  end
+  
   config.vm.provision "shell", path: "provision.sh"
 
 end
