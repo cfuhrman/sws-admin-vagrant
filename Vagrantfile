@@ -139,7 +139,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node.vm.hostname = 'admin-dev.corp.shipwire.com'
     node.hostmanager.aliases = %w(
       kong.admin-dev.corp.shipwire.com
-      pgdb.admin-dev.corp.shipwire.com
+      cdb.admin-dev.corp.shipwire.com
+      redis.admin-dev.corp.shipwire.com
     )
   end
 
@@ -148,19 +149,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     chef.add_recipe "yum-epel"
     chef.add_recipe "standard"
-    chef.add_recipe "cassandra-platform::install"
-#    chef.add_recipe "kong"
-    chef.add_recipe "postgresql"
+    # chef.add_recipe "nginx"
+    # chef.add_recipe "cassandra-platform::install"
+    chef.add_recipe "kong"
+#    chef.add_recipe "postgresql"
 
     chef.json = {
       java: {
         jdk_version: 8
       },
-      'cassandra-platform': {
-        hosts: ['127.0.0.1'],
-        url: "http://mirrors.sonic.net/apache/cassandra/3.0.14/apache-cassandra-3.0.14-bin.tar.gz",
-        checksum: "0156c1bfc25021b98e9f6ca79e324b393a767fd947ff5825ea99e443b929c1a9"
-      }
+      cassandra: {
+        install_method: "datastax",
+        cluster_name: "vagrant"
+      },
+      # kong: {
+      #   version: "0.10.3",
+      #   checksum: "983cddb9eff48c2488d07a90104d56c2274925b99dab81001025769410e70862"
+      # }
+      # 'cassandra-platform': {
+      #   hosts: ['127.0.0.1'],
+      #   url: "http://mirrors.sonic.net/apache/cassandra/3.0.14/apache-cassandra-3.0.14-bin.tar.gz",
+      #   checksum: "0156c1bfc25021b98e9f6ca79e324b393a767fd947ff5825ea99e443b929c1a9"
+      # }
 
     }
 
