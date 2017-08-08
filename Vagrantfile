@@ -20,7 +20,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "centos/7"
+  #config.vm.box = "centos/7"
+  config.vm.box = "bento/centos-7.3"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -110,9 +111,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     memory = 2048
   end
 
-  config.vm.provider :virtualbox do |vb|
-   vb.name = "vagrant_swsadmin"
-   vb.memory = memory
+  env_provider = ENV["VAGRANT_DEFAULT_PROVIDER"]
+
+  config.vm.provider :env_provider do |vb|
+    vb.name = "vagrant_swsadmin"
+    vb.memory = memory
   end
 
   #config.vm.box = "ubuntu/trusty64"
@@ -122,7 +125,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8443, host: 8443
   config.vm.network :forwarded_port, guest: 8444, host: 8444
   # config.vm.network "private_network", type: "dhcp"
-  config.vm.network :private_network, ip: '192.168.44.43'
+  #config.vm.network :private_network, ip: '192.168.44.43'
+  config.vm.network :private_network, ip: '192.168.42.43'
 
   #
   # Host manager for local hosts file
@@ -138,7 +142,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       pgdb.admin-dev.corp.shipwire.com
     )
   end
-  
-  config.vm.provision "shell", path: "provision.sh"
 
+  #config.vm.provision "shell", path: "provision.sh"
+  config.vm.provision :chef_solo do |chef|
+
+    chef.add_recipe "yum-epel"
+    chef.add_recipe "standard"
+    chef.add_recipe "cassandra-platform::install"
+#    chef.add_recipe "kong"
+    chef.add_recipe "postgresql"
+
+    chef.json = {
+      java: {
+        jdk_version: 8
+      },
+      'cassandra-platform': {
+        hosts: ['127.0.0.1'],
+        url: "http://mirrors.sonic.net/apache/cassandra/3.0.14/apache-cassandra-3.0.14-bin.tar.gz",
+        checksum: "0156c1bfc25021b98e9f6ca79e324b393a767fd947ff5825ea99e443b929c1a9"
+      }
+
+    }
+
+  end
 end
