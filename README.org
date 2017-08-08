@@ -1,0 +1,38 @@
+#+TITLE: SWS Admin Vagrant Instance
+#+AUTHOR: Christopher M. Fuhrman
+#+EMAIL: christopher.fuhrman@ingrammicro.com
+#+OPTIONS: email:t
+#
+#+LATEX_HEADER: \usepackage{fancyhdr}
+#+LATEX_HEADER: \pagestyle{fancyplain}
+#+LATEX_HEADER: \usepackage{bookmark}
+#+LATEX_HEADER: \hypersetup{urlcolor=blue}
+#+LATEX_HEADER: \hypersetup{colorlinks,urlcolor=blue}
+#+LATEX_HEADER: \usepackage[backend=bibtex]{biblatex}
+#+LATEX_HEADER: \fancyhead[RE,LO]{\leftmark}
+#+LATEX_HEADER: \fancyhead[LE,RO]{\thepage}
+
+#+LATEX: \thispagestyle{empty}
+[TABLE-OF-CONTENTS]
+
+* Overview
+
+  This vagrant instance will initialize the following:
+
+   - CentOS 7
+   - PostgreSQL 9.6
+   - Kong
+
+* Provisioning
+
+  Prior to provisioning Vagrant, be sure to set =VAGRANT_DEFAULT_PROVIDER= to
+  your choice of provider, otherwise the default 'virtualbox' will be used.
+  Available providers include:
+
+   - =vmware_fusion=
+   - =vmware_workstation=
+   - =parallels=
+
+
+
+  
