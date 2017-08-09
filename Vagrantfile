@@ -115,7 +115,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :env_provider do |vb|
     vb.name = "vagrant_swsadmin"
-    vb.memory = memory
+    vb.memory = "2048"
   end
 
   #config.vm.box = "ubuntu/trusty64"
@@ -150,29 +150,44 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "yum-epel"
     chef.add_recipe "standard"
     # chef.add_recipe "nginx"
-    # chef.add_recipe "cassandra-platform::install"
-    chef.add_recipe "kong"
-#    chef.add_recipe "postgresql"
+#    chef.add_recipe "cassandra-platform"
+    #chef.add_recipe "postgresql::server" #seems kong needs postgres to start
+    chef.add_recipe "standard::cassandra"
+    chef.add_recipe "standard::kong"
+#    chef.add_recipe "kong::_from_package"
+#    chef.add_recipe "kong::_configuration"
 
     chef.json = {
       java: {
         jdk_version: 8
       },
-      cassandra: {
-        install_method: "datastax",
-        cluster_name: "vagrant"
+      #      cassandra: {
+      #        install_method: "datastax",
+      #        config: {
+      #          cluster_name: "vagrant"
+      #        }
+      #      },
+      kong: {
+        version: "0.10.3",
+        package_checksum: "eb46522783bcd1799a3a6647abb300b466b4f2570d0ebd43bf2b11b401d7e2d3",
+        manage_cassandra: false
+
       },
+      #      postgresql: {
+      #        password: {
+      #          postgres: "b3873e3ee1f184466e179d5e4e2b3313"  #the password is test123
+      #          #generated with: echo -n 'test123''postgres' | openssl md5 | sed -e 's/.* /md5/'
+      #        }
+      #    }
       # kong: {
       #   version: "0.10.3",
       #   checksum: "983cddb9eff48c2488d07a90104d56c2274925b99dab81001025769410e70862"
       # }
-      # 'cassandra-platform': {
-      #   hosts: ['127.0.0.1'],
-      #   url: "http://mirrors.sonic.net/apache/cassandra/3.0.14/apache-cassandra-3.0.14-bin.tar.gz",
-      #   checksum: "0156c1bfc25021b98e9f6ca79e324b393a767fd947ff5825ea99e443b929c1a9"
-      # }
-
+#      'cassandra-platform': {
+#        hosts: ['127.0.0.1'],
+#        url: "http://mirrors.sonic.net/apache/cassandra/3.0.14/apache-cassandra-3.0.14-bin.tar.gz",
+#        checksum: "0156c1bfc25021b98e9f6ca79e324b393a767fd947ff5825ea99e443b929c1a9"
+#      }
     }
-
   end
 end
