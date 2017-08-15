@@ -37,4 +37,5 @@ sudo yum --assumeyes  install epel-release
 inform $L1 "Installing Standard Packages"
 sudo yum --assumeyes install ${STANDARD_RPMS[*]}
 
-# Ende
+inform $L2 "[standard] done"
+

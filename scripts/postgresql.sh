@@ -16,7 +16,6 @@
 #
 
 PGSQL_DOWNLOAD_DIRECTORY=`mktemp -d /tmp/${0##*/}.XXXXXX`
-PGSQL_VERSION=96
 PGSQL_DOT_VERSION=${PGSQL_VERSION:0:1}.${PGSQL_VERSION:1:1}
 PGSQL_RPM_VERSION=${PGSQL_DOT_VERSION}-3
 PGSQL_SOURCE_URL=${PGSQL_SOURCE_URL:=https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos$PGSQL_VERSION-$PGSQL_RPM_VERSION.noarch.rpm}
@@ -57,7 +56,10 @@ fi
 
 inform $L1 "Setting up appropriate access controls"
 NOW=date
-sudo bash -c "cat > $PGSQL_DATADIR/pg_hba.conf" << EOL
+
+if [ ! -e ${PGSQL_DATADIR}/pg_hba.conf ]; then
+	inform $L2 "Configuring PostgreSQL Access File"
+	sudo bash -c "cat > $PGSQL_DATADIR/pg_hba.conf" << EOL
 # PostgreSQL Client Authentication Configuration File
 # ===================================================
 #
@@ -71,9 +73,10 @@ local   all             all                                     trust
 host    all             all             127.0.0.1/32            trust
 host    all             all             ::1/128                 trust
 EOL
+fi
 
+inform $L2 "Enabling and starting the PostgreSQL service"
 sudo systemctl enable postgresql-${PGSQL_DOT_VERSION}.service
 sudo systemctl start postgresql-${PGSQL_DOT_VERSION}.service
-inform $L2 "done"
+inform $L2 "[postgresql] done"
 
-# Ende

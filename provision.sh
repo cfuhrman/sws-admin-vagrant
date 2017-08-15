@@ -71,7 +71,28 @@ inform ()
 headerDisplay
 
 source ${SCRIPTS_DIR}/standard.sh
-source ${SCRIPTS_DIR}/postgresql.sh
+
+# Install our preferred data store
+case $KONG_DATASTORE in
+
+postgres )
+	inform $L1 "PostgreSQL will be the datastore"
+	source ${SCRIPTS_DIR}/postgresql.sh
+	;;
+
+cassandra )
+	inform $L1 "Cassandra will be the datastore"
+	source ${SCRIPTS_DIR}/cassandra.sh
+	;;
+
+* )
+	inform $L1 "Using default ${KONG_DEFAULT_DATASTORE} instance"
+	source ${SCRIPTS_DIR}/${KONG_DEFAULT_DATASTORE}.sh
+	;;
+
+esac
+
+source ${SCRIPTS_DIR}/redis.sh
 source ${SCRIPTS_DIR}/kong.sh
 
 inform ${L1} "Done with Provisioning.  Now it's time to have fun!"

@@ -14,8 +14,22 @@
 # Contains configuration variables
 #
 
-# Kong Configuration
-KONG_CASSANDRA=${KONG_CASSANDRA:=3}
-KONG_VERSION=${KONG_VERSION:=0.10.3}
+# Cassandra Configuration
+CASSANDRA_VERSION=${CASSANDRA_VERSION:-311x}
+CASSANDRA_BASE_URL=https://www.apache.org/dist/cassandra
+CASSANDRA_YUM_REPO=${CASSANDRA_BASE_URL}/redhat/${CASSANDRA_VERSION}/
+CASSANDRA_GPG_KEY=${CASSANDRA_BASE_URL}/KEYS
 
-# Ende
+# PostgreSQL Configuration
+PGSQL_VERSION=${PGSQL_VERSION:-96}
+
+# Kong Configuration
+KONG_VERSION=${KONG_VERSION:-0.10.3}
+
+# Can be one of the following:
+#
+#  1. postgres
+#  2. cassandra
+KONG_DATASTORE=cassandra
+
+
