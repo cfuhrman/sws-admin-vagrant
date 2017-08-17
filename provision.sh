@@ -94,6 +94,8 @@ esac
 
 source ${SCRIPTS_DIR}/redis.sh
 source ${SCRIPTS_DIR}/kong.sh
+source ${SCRIPTS_DIR}/php7.sh
+source ${SCRIPTS_DIR}/laravel.sh
 
 inform ${L1} "Done with Provisioning.  Now it's time to have fun!"
 
