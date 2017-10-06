@@ -36,4 +36,7 @@ KONG_VERSION=${KONG_VERSION:-0.10.3}
 #  2. cassandra
 KONG_DATASTORE=cassandra
 
+# Kong Dashboard Configuration
+KONG_DASHBOARD_VERSION=2.0
+KONG_DASHBOARD_URL=https://github.com/PGBI/kong-dashboard
 

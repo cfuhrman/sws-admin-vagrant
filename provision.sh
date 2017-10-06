@@ -98,6 +98,7 @@ source ${SCRIPTS_DIR}/php7.sh
 source ${SCRIPTS_DIR}/laravel.sh
 source ${SCRIPTS_DIR}/npm.sh
 source ${SCRIPTS_DIR}/vuejs.sh
+source ${SCRIPTS_DIR}/kong-dashboard.sh
 
 inform ${L1} "Done with Provisioning.  Now it's time to have fun! 🍻"
 
