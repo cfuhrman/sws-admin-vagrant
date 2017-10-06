@@ -22,6 +22,8 @@ if [ ! -d kong-dashboard ]; then
 	git clone -b ${KONG_DASHBOARD_VERSION} ${KONG_DASHBOARD_URL}
 fi
 
+inform $L2 "Setting appropriate ownership of kong-dashboard directory"
+chown -R vagrant.vagrant kong-dashboard
 cd kong-dashboard
 
 # Grab the latest tag name for this branch
